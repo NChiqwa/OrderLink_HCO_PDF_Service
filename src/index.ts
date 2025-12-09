@@ -43,6 +43,10 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok', service: 'OrderLink PDF Service' });
 });
 
+app.get('/', (req, res) => {
+    res.send('PDF Service is running');
+});
+
 app.listen(PORT, () => {
     console.log(`PDF Service running on port ${PORT}`);
 });
