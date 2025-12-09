@@ -1,4 +1,5 @@
-import puppeteer from 'puppeteer';
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
 import { getOrderTemplate } from '../templates/orderTemplate';
 
 export const generateOrderPDF = async (order: any): Promise<Buffer> => {
@@ -7,18 +8,14 @@ export const generateOrderPDF = async (order: any): Promise<Buffer> => {
         // إعداد HTML
         const htmlContent = getOrderTemplate(order);
 
-        // إطلاق المتصفح مع خيارات محسنة للأداء
+        // إطلاق المتصفح مع خيارات محسنة للأداء ومتوافقة مع Render
         browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-gpu',
-                '--disable-extensions',
-                '--no-zygote',
-            ],
-        });
+            args: (chromium as any).args,
+            defaultViewport: (chromium as any).defaultViewport || null,
+            executablePath: await (chromium as any).executablePath(),
+            headless: (chromium as any).headless === undefined ? true : (chromium as any).headless,
+            ignoreHTTPSErrors: true,
+        } as any);
 
         const page = await browser.newPage();
 
