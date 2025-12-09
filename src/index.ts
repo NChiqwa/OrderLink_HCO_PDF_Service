@@ -14,13 +14,13 @@ app.use(express.json({ limit: '50mb' })); // Increase limit for large order data
 app.post('/generate-pdf', async (req: Request, res: Response) => {
     try {
         const order = req.body;
-        
+
         if (!order || !order.orderNumber) {
-             res.status(400).json({ error: 'Invalid order data' });
-             return;
+            res.status(400).json({ error: 'Invalid order data' });
+            return;
         }
 
-        console.log(`Generating PDF for order #${order.orderNumber}`);
+        console.log(`[${req.method}] Generating PDF for order #${order.orderNumber}`);
 
         const pdfBuffer = await generateOrderPDF(order);
 
